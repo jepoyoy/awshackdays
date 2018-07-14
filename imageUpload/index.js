@@ -4,6 +4,11 @@ var bodyParser = require('body-parser')
 const https = require("https")
 const fs = require("fs")
 
+const options = {
+  key: fs.readFileSync("/home/jepoyoy/key.pem"),
+  cert: fs.readFileSync("/home/jepoyoy/certificate.pem")
+};
+
 const app = express()
 
 // create application/json parser
@@ -80,5 +85,7 @@ s3.upload(params, (err, data) => {
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000 - http only!'))
+
+https.createServer(options, app).listen(8080);
 
 app.use(express.static('public'))
