@@ -4,11 +4,6 @@ var bodyParser = require('body-parser')
 const https = require("https")
 const fs = require("fs")
 
-const options = {
-  key: fs.readFileSync("/home/jepoyoy/key.pem"),
-  cert: fs.readFileSync("/home/jepoyoy/certificate.pem")
-};
-
 const app = express()
 
 // create application/json parser
@@ -25,7 +20,7 @@ app.post('/upload', urlencodedParser, function (req, res) {
 
 // Configure AWS with your access and secret key. I stored mine as an ENV on the server
 // ie: process.env.ACCESS_KEY_ID = "abcdefg"
-AWS.config.update({ accessKeyId: "AKIAIHH4KXILGVTGRHGA", secretAccessKey: "7Z9TO+0fl7TgWV2ttPfNSEL1Rrs9NLIqsgGFKaZE" });
+AWS.config.update({ accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET });
 
 // Create an s3 instance
 const s3 = new AWS.S3();
@@ -85,7 +80,5 @@ s3.upload(params, (err, data) => {
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000 - http only!'))
-
-https.createServer(options, app).listen(8080);
 
 app.use(express.static('public'))
