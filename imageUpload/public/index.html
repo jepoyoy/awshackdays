@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description" content="WebRTC code samples">
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+  <meta itemprop="description" content="Client-side WebRTC code samples">
+  <meta itemprop="image" content="../../../images/webrtc-icon-192x192.png">
+  <meta itemprop="name" content="WebRTC code samples">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta id="theme-color" name="theme-color" content="#ffffff">
+
+  <base target="_blank">
+
+  <title>Facematch Prototype</title>
+
+  <link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
+  <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <style>
+    #custom-border{
+        background-color: #265a88;
+      border-color: #1f496e;
+      background-image: -webkit-gradient(linear, left 0%, left 100%, from(#3174b0),
+        to(#265a88));
+      background-image: -webkit-linear-gradient(top, #3174b0, 0%, #265a88, 100%);
+      background-image: -moz-linear-gradient(top, #3174b0 0%, #265a88 100%);
+      background-image: linear-gradient(to bottom, #3174b0 0%, #265a88 100%);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3174b0',
+    endColorstr='#ff265a88', GradientType=0);
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h3>Loan App - Image Input</h3>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+           
+              1. Take Selfie<br/>
+               <video width="300" height="300" autoplay></video>
+                      <a href="javascript:void(0)" id="snapshot">Take snapshot</a>
+                      <canvas width="300" height="300" style="display:none"></canvas>
+<br/>
+                      <img id="customerFaceImg" style="width:200px;height:200px;" class="img-rounded">
+           
+
+              <br/>
+              <br/>
+
+              2. Upload ID
+              <input type="file" name="pic" accept="image/*" onchange="previewFile()">
+              <br/>
+              <img  id="customerIdImg" style="width:200px;height:200px;" class="img-rounded">
+             
+
+              <br/>
+              <br/>
+
+              <form id="finalizeForm" action="upload" method="POST">
+                     <input type="text" class="form-control" id="customerFace" name="customerFace">
+                      <input type="text" class="form-control" id="customerId" name="customerId">
+                  <input type="submit" value="Finalize Application" />
+
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="js/main.js?v=1.0.2"></script>
+  <script src="js/events.js?v=1.0.2"></script>
+</body>
+</html>

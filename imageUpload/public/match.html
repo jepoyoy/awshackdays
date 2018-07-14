@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description" content="WebRTC code samples">
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+  <meta itemprop="description" content="Client-side WebRTC code samples">
+  <meta itemprop="image" content="../../../images/webrtc-icon-192x192.png">
+  <meta itemprop="name" content="WebRTC code samples">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta id="theme-color" name="theme-color" content="#ffffff">
+
+  <base target="_blank">
+
+  <title>Facematch Prototype</title>
+
+  <link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
+  <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <style>
+    #custom-border{
+        background-color: #265a88;
+      border-color: #1f496e;
+      background-image: -webkit-gradient(linear, left 0%, left 100%, from(#3174b0),
+        to(#265a88));
+      background-image: -webkit-linear-gradient(top, #3174b0, 0%, #265a88, 100%);
+      background-image: -moz-linear-gradient(top, #3174b0 0%, #265a88 100%);
+      background-image: linear-gradient(to bottom, #3174b0 0%, #265a88 100%);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3174b0',
+    endColorstr='#ff265a88', GradientType=0);
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="custom-border">
+    <img src="data:image/png;base64,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"/>
+  </div>
+  <h3>Facematch Engine Simulator</h3>
+
+  <div class="container">
+    
+    <div class="row">
+      <div class="col-md-3">&nbsp;</div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-4">
+                <img id="inputImage1Prev" style="border:1px solid #000; background-color:gray; width:100px;height:100px;" class="img-rounded">
+              </div>
+              <div class="col-md-4" style="text-align: center">
+                <img style="display:none" id="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAADxiciAvPgo8Yj5XYXJuaW5nPC9iPjogIG15c3FsX3F1ZXJ5KCkgWzxhIGhyZWY9J2Z1bmN0aW9uLm15c3FsLXF1ZXJ5Jz5mdW5jdGlvbi5teXNxbC1xdWVyeTwvYT5dOiBDYW4ndCBjb25uZWN0IHRvIGxvY2FsIE15U1FMIHNlcnZlciB0aHJvdWdoIHNvY2tldCAnL3Zhci9ydW4vbXlzcWxkL215c3FsZC5zb2NrJyAoMikgaW4gPGI+L2hvbWUvYWpheGxvYWQvd3d3L2xpYnJhaXJpZXMvY2xhc3MubXlzcWwucGhwPC9iPiBvbiBsaW5lIDxiPjY4PC9iPjxiciAvPgo8YnIgLz4KPGI+V2FybmluZzwvYj46ICBteXNxbF9xdWVyeSgpIFs8YSBocmVmPSdmdW5jdGlvbi5teXNxbC1xdWVyeSc+ZnVuY3Rpb24ubXlzcWwtcXVlcnk8L2E+XTogQSBsaW5rIHRvIHRoZSBzZXJ2ZXIgY291bGQgbm90IGJlIGVzdGFibGlzaGVkIGluIDxiPi9ob21lL2FqYXhsb2FkL3d3dy9saWJyYWlyaWVzL2NsYXNzLm15c3FsLnBocDwvYj4gb24gbGluZSA8Yj42ODwvYj48YnIgLz4KPGJyIC8+CjxiPldhcm5pbmc8L2I+OiAgbXlzcWxfcXVlcnkoKSBbPGEgaHJlZj0nZnVuY3Rpb24ubXlzcWwtcXVlcnknPmZ1bmN0aW9uLm15c3FsLXF1ZXJ5PC9hPl06IENhbid0IGNvbm5lY3QgdG8gbG9jYWwgTXlTUUwgc2VydmVyIHRocm91Z2ggc29ja2V0ICcvdmFyL3J1bi9teXNxbGQvbXlzcWxkLnNvY2snICgyKSBpbiA8Yj4vaG9tZS9hamF4bG9hZC93d3cvbGlicmFpcmllcy9jbGFzcy5teXNxbC5waHA8L2I+IG9uIGxpbmUgPGI+Njg8L2I+PGJyIC8+CjxiciAvPgo8Yj5XYXJuaW5nPC9iPjogIG15c3FsX3F1ZXJ5KCkgWzxhIGhyZWY9J2Z1bmN0aW9uLm15c3FsLXF1ZXJ5Jz5mdW5jdGlvbi5teXNxbC1xdWVyeTwvYT5dOiBBIGxpbmsgdG8gdGhlIHNlcnZlciBjb3VsZCBub3QgYmUgZXN0YWJsaXNoZWQgaW4gPGI+L2hvbWUvYWpheGxvYWQvd3d3L2xpYnJhaXJpZXMvY2xhc3MubXlzcWwucGhwPC9iPiBvbiBsaW5lIDxiPjY4PC9iPjxiciAvPgo8YnIgLz4KPGI+V2FybmluZzwvYj46ICBteXNxbF9xdWVyeSgpIFs8YSBocmVmPSdmdW5jdGlvbi5teXNxbC1xdWVyeSc+ZnVuY3Rpb24ubXlzcWwtcXVlcnk8L2E+XTogQ2FuJ3QgY29ubmVjdCB0byBsb2NhbCBNeVNRTCBzZXJ2ZXIgdGhyb3VnaCBzb2NrZXQgJy92YXIvcnVuL215c3FsZC9teXNxbGQuc29jaycgKDIpIGluIDxiPi9ob21lL2FqYXhsb2FkL3d3dy9saWJyYWlyaWVzL2NsYXNzLm15c3FsLnBocDwvYj4gb24gbGluZSA8Yj42ODwvYj48YnIgLz4KPGJyIC8+CjxiPldhcm5pbmc8L2I+OiAgbXlzcWxfcXVlcnkoKSBbPGEgaHJlZj0nZnVuY3Rpb24ubXlzcWwtcXVlcnknPmZ1bmN0aW9uLm15c3FsLXF1ZXJ5PC9hPl06IEEgbGluayB0byB0aGUgc2VydmVyIGNvdWxkIG5vdCBiZSBlc3RhYmxpc2hlZCBpbiA8Yj4vaG9tZS9hamF4bG9hZC93d3cvbGlicmFpcmllcy9jbGFzcy5teXNxbC5waHA8L2I+IG9uIGxpbmUgPGI+Njg8L2I+PGJyIC8+Cg=="/>
+                <p id="resultPanel" style="font-size:1em">
+                  
+                </p>
+                <button id="matchImages">Check Match</button>
+              </div>
+              <div class="col-md-4" style="text-align:right">
+                <img id="inputImage2Prev" style="border:1px solid #000; background-color:gray; width:100px;height:100px;" class="img-rounded">
+              </div>
+            </div> 
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">&nbsp;</div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+              <input type="hidden" class="form-control" id="inputImage1">
+              <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">By Camera</a></li>
+                  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">By Upload</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="home">
+                      <video width="300" height="300" autoplay></video>
+                      <button id="snapshotMatch">Take snapshot</button>
+                      <canvas width="300" height="300" style="display:none"></canvas>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="profile">
+                      Select file: 
+                      <input type="file" name="pic" accept="image/*" onchange="previewFileForMatch()">
+                  </div>
+                </div>
+
+              </div>
+
+
+             
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form id="searchForm">
+              <div class="form-group">
+                <input type="hidden" class="form-control" id="inputImage2">
+              </div>
+              <div class="form-group">
+                <label for="id">User ID</label>
+                <input type="text" class="form-control" id="userid" placeholder="User ID">
+              </div>
+              <div class="form-group">
+                <label for="name">User Name</label>
+                <input type="text" class="form-control" id="username" placeholder="User Name">
+              </div>
+              <button type="submit" class="btn btn-default">Search User</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="js/main.js?v=1.0.2"></script>
+  <script src="js/events.js?v=1.0.2"></script>
+
+</body>
+</html>
